@@ -14,6 +14,8 @@ function parse(data) {
 
     // make the SGML and the XML
     var sgml = '<OFX>' + ofx[1];
+    
+    // TODO (EK): Check to see if it is actually valid xml or not already
     var xml = sgml
         .replace(/>\s+</g, '><')
         .replace(/\s+</g, '<')
@@ -21,8 +23,11 @@ function parse(data) {
         .replace(/<([A-Z0-9_]*)+\.+([A-Z0-9_]*)>([^<]+)/g, '<\$1\$2>\$3' )
         .replace(/<(\w+?)>([^<]+)/g, '<\$1>\$2</\$1>');
 
+
+    console.log('XML', xml);
+
     // parse the XML
-    var data = JSON.parse(xml2json.toJson(xml, { coerce: false }));
+    var data = xml2json.toJson(xml, { coerce: true, object: true });
 
     // put the headers into the returned data
     data.header = header;
